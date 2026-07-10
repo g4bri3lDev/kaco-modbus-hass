@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "KACO inverter",
+        "description": "Pick the shared Modbus connection that reaches the inverter and its unit ID.",
+        "data": {
+          "connection_entry_id": "Modbus connection",
+          "unit_id": "Unit ID"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not reach a SunSpec device on that connection/unit."
+    },
+    "abort": {
+      "already_configured": "This inverter is already configured.",
+      "no_modbus_connection": "Set up a Modbus Connection integration entry first."
+    }
+  }
+}
