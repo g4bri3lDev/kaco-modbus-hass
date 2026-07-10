@@ -18,6 +18,34 @@ To use this integration, you need:
    - Enable the protocol (default Modbus TCP port is 502)
    - Refer to your inverter's documentation or KACO's Modbus Protocol Application Note for details
 
+### Install the kaco-modbus library (until it's on PyPI)
+
+This integration's `manifest.json` declares a dependency on the
+[`kaco-modbus`](https://github.com/glackermeier/kaco-modbus) device library
+(`kaco-modbus>=0.1,<1`). Home Assistant normally resolves `manifest.json`
+requirements by installing them from PyPI when the integration loads —
+**but `kaco-modbus` isn't published to PyPI yet**, so on a stock HA install
+the integration will fail to load with a requirements error until you
+install the library into HA's Python environment yourself:
+
+- For a **venv install** (e.g. a development HA instance), install
+  straight from the repo:
+  ```bash
+  pip install git+https://github.com/glackermeier/kaco-modbus.git
+  ```
+  or, for a local checkout you're iterating on:
+  ```bash
+  pip install -e /path/to/kaco-modbus
+  ```
+  Run this inside the same Python environment Home Assistant uses.
+- For **HA OS / Supervised / containers**, HA's requirement installer
+  needs the `kaco-modbus` wheel to be resolvable, which these managed
+  environments don't give you an easy way to influence by hand. The
+  simplest path today is a development HA instance (venv or local
+  checkout) where you control the Python environment directly.
+
+Once `kaco-modbus` is published to PyPI this step disappears.
+
 ## Installation
 
 ### Option 1: HACS (Custom Repository)
@@ -86,6 +114,12 @@ If setup fails with a "cannot_connect" error:
    ```
    This will attempt to connect and print live inverter data if successful, or show a connection error
 4. **Check network**: Ensure your Home Assistant machine can reach the inverter on port 502
+
+### Integration fails to load with a requirements error
+
+The `kaco-modbus` library isn't installed/resolvable in Home Assistant's
+Python environment. See [Install the kaco-modbus library](#install-the-kaco-modbus-library-until-its-on-pypi)
+under Prerequisites.
 
 See the [kaco-modbus repository](https://github.com/glackermeier/kaco-modbus) for more debugging information.
 
