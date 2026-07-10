@@ -41,7 +41,7 @@ To use this integration, you need:
 Once the integration is installed and a Modbus Connection is configured:
 
 1. Go to **Settings** → **Devices & Services**
-2. Click **Create Integration** (or **+** button)
+2. Click **Add Integration**
 3. Search for and select **"KACO blueplanet"**
 4. Select your **Modbus Connection** from the dropdown
 5. Enter the **Modbus Unit ID** (default is 1; check your inverter configuration)
@@ -56,7 +56,7 @@ The integration exposes 15 sensors:
 |--------|------|-------------------|-------|
 | AC Power | W | ✓ | Real-time AC output power |
 | Lifetime Energy | Wh | ✓ | Total energy produced; Energy Dashboard compatible |
-| Operating State | — | ✓ | Current inverter state (off, on, standby, fault, etc.) |
+| Operating State | — | ✓ | Current inverter state (off, sleeping, mppt, throttled, fault, standby, …) |
 | AC Frequency | Hz | ✓ | Grid frequency |
 | AC Current | A | ✓ | Real-time AC output current |
 | DC Power | W | ✓ | Real-time DC input power |
