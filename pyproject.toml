@@ -1,0 +1,33 @@
+[project]
+name = "kaco-modbus-hass-tests"
+version = "0"
+description = "Dev/test environment for the KACO blueplanet custom integration."
+requires-python = ">=3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "ruff",
+    "modbus-connection>=3.4,<4",
+    "pytest-homeassistant-custom-component",
+    # kaco-modbus installed from the sibling checkout until it's on PyPI:
+    "kaco-modbus",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+kaco-modbus = { path = "../kaco-modbus", editable = true }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
