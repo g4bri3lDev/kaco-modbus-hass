@@ -17,5 +17,64 @@
       "already_configured": "This inverter is already configured.",
       "no_modbus_connection": "Set up a Modbus Connection integration entry first."
     }
+  },
+  "entity": {
+    "sensor": {
+      "ac_power": {
+        "name": "AC power"
+      },
+      "lifetime_energy": {
+        "name": "Lifetime energy"
+      },
+      "operating_state": {
+        "name": "Operating state",
+        "state": {
+          "off": "Off",
+          "sleeping": "Sleeping",
+          "starting": "Starting",
+          "mppt": "Producing",
+          "throttled": "Throttled",
+          "shutting_down": "Shutting down",
+          "fault": "Fault",
+          "standby": "Standby"
+        }
+      },
+      "frequency": {
+        "name": "Grid frequency"
+      },
+      "ac_current": {
+        "name": "AC current"
+      },
+      "voltage_phase_a": {
+        "name": "Voltage phase A"
+      },
+      "voltage_phase_b": {
+        "name": "Voltage phase B"
+      },
+      "voltage_phase_c": {
+        "name": "Voltage phase C"
+      },
+      "dc_power": {
+        "name": "DC power"
+      },
+      "dc_voltage": {
+        "name": "DC voltage"
+      },
+      "dc_current": {
+        "name": "DC current"
+      },
+      "apparent_power": {
+        "name": "Apparent power"
+      },
+      "reactive_power": {
+        "name": "Reactive power"
+      },
+      "temperature_cabinet": {
+        "name": "Cabinet temperature"
+      },
+      "temperature_heatsink": {
+        "name": "Heatsink temperature"
+      }
+    }
   }
 }

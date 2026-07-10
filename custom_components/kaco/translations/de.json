@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "KACO Wechselrichter",
+        "description": "Wähle die gemeinsame Modbus-Verbindung, über die der Wechselrichter erreichbar ist, und seine Unit-ID.",
+        "data": {
+          "connection_entry_id": "Modbus-Verbindung",
+          "unit_id": "Unit-ID"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Es konnte kein SunSpec-Gerät auf dieser Verbindung/Unit erreicht werden."
+    },
+    "abort": {
+      "already_configured": "Dieser Wechselrichter ist bereits eingerichtet.",
+      "no_modbus_connection": "Richte zuerst einen Modbus-Connection-Integrationseintrag ein."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "ac_power": {
+        "name": "AC-Leistung"
+      },
+      "lifetime_energy": {
+        "name": "Gesamtenergie"
+      },
+      "operating_state": {
+        "name": "Betriebszustand",
+        "state": {
+          "off": "Aus",
+          "sleeping": "Schlafmodus",
+          "starting": "Startet",
+          "mppt": "Erzeugt",
+          "throttled": "Gedrosselt",
+          "shutting_down": "Fährt herunter",
+          "fault": "Störung",
+          "standby": "Standby"
+        }
+      },
+      "frequency": {
+        "name": "Netzfrequenz"
+      },
+      "ac_current": {
+        "name": "AC-Strom"
+      },
+      "voltage_phase_a": {
+        "name": "Spannung Phase A"
+      },
+      "voltage_phase_b": {
+        "name": "Spannung Phase B"
+      },
+      "voltage_phase_c": {
+        "name": "Spannung Phase C"
+      },
+      "dc_power": {
+        "name": "DC-Leistung"
+      },
+      "dc_voltage": {
+        "name": "DC-Spannung"
+      },
+      "dc_current": {
+        "name": "DC-Strom"
+      },
+      "apparent_power": {
+        "name": "Scheinleistung"
+      },
+      "reactive_power": {
+        "name": "Blindleistung"
+      },
+      "temperature_cabinet": {
+        "name": "Schranktemperatur"
+      },
+      "temperature_heatsink": {
+        "name": "Kühlkörpertemperatur"
+      }
+    }
+  }
+}
