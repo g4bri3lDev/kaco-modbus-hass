@@ -16,6 +16,10 @@ async def test_sensors_report_values(hass, mock_unit, config_entry):
     )
     assert energy is not None
     assert float(energy.state) == 8883.0  # kWh after suggested unit conversion
+    # The Energy dashboard picker filters on exactly these attributes.
+    assert energy.attributes["device_class"] == "energy"
+    assert energy.attributes["state_class"] == "total_increasing"
+    assert energy.attributes["unit_of_measurement"] == "kWh"
 
     operating = hass.states.get(
         "sensor.kaco_new_energy_blueplanet_8_6_tl3_operating_state"
@@ -57,18 +61,22 @@ async def test_mppt_string_sensors(hass, mock_unit_real, config_entry):
     assert float(state_1.state) == 2020.0
     assert float(state_2.state) == 2230.0
 
-    # Disabled-by-default sensors (voltage/current/energy) don't get states,
-    # but their unique_ids should still be registered.
+    # Disabled-by-default sensors (voltage/current) don't get states, but
+    # their unique_ids should still be registered.
     registry = er.async_get(hass)
     entry = hass.config_entries.async_entries("kaco")[0]
     serial = entry.runtime_data.device.probe.serial
     for suffix in (
         "mppt_1_dc_voltage",
         "mppt_1_dc_current",
-        "mppt_1_dc_energy",
         "mppt_2_dc_voltage",
         "mppt_2_dc_current",
-        "mppt_2_dc_energy",
     ):
         unique_id = f"{serial}_{suffix}"
         assert registry.async_get_entity_id("sensor", "kaco", unique_id) is not None
+
+    # This device never accumulates per-string energy (DCWH sentinel 0 ->
+    # None), so no energy entities may be created for it at all.
+    for suffix in ("mppt_1_dc_energy", "mppt_2_dc_energy"):
+        unique_id = f"{serial}_{suffix}"
+        assert registry.async_get_entity_id("sensor", "kaco", unique_id) is None

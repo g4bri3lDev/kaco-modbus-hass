@@ -191,7 +191,7 @@ def _mppt_value(module_index: int, attr: str) -> Callable[[KacoInverter], StateT
 def _mppt_descriptions(device: KacoInverter) -> tuple[KacoSensorDescription, ...]:
     """Per-string sensors for each MPPT module the device advertises."""
     descriptions: list[KacoSensorDescription] = []
-    for module_index in range(len(device.mppt_modules)):
+    for module_index, module in enumerate(device.mppt_modules):
         i = module_index + 1
         placeholders = {"index": str(i)}
         descriptions.extend(
@@ -225,6 +225,14 @@ def _mppt_descriptions(device: KacoInverter) -> tuple[KacoSensorDescription, ...
                     entity_registry_enabled_default=False,
                     value_fn=_mppt_value(module_index, "dc_current"),
                 ),
+            )
+        )
+        # SunSpec marks a never-accumulated counter with 0 -> None. KACO's
+        # TL3 does not accumulate per-string energy, so only create the
+        # sensor when the device actually reports a value (the coordinator
+        # has already done its first refresh by the time we run).
+        if module.dc_energy is not None:
+            descriptions.append(
                 KacoSensorDescription(
                     key=f"mppt_{i}_dc_energy",
                     translation_key="mppt_dc_energy",
@@ -237,7 +245,6 @@ def _mppt_descriptions(device: KacoInverter) -> tuple[KacoSensorDescription, ...
                     value_fn=_mppt_value(module_index, "dc_energy"),
                 ),
             )
-        )
     return tuple(descriptions)
 
 
