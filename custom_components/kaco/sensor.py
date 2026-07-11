@@ -37,6 +37,10 @@ class KacoSensorDescription(SensorEntityDescription):
 
     value_fn: Callable[[KacoInverter], StateType]
     translation_placeholders: dict[str, str] | None = None
+    # Some SunSpec points are permanently unimplemented on a given unit
+    # (sentinel -> None on every read). When set, the sensor is only created
+    # if this returns True after the coordinator's first refresh.
+    supported_fn: Callable[[KacoInverter], bool] | None = None
 
 
 def _state(device: KacoInverter) -> str | None:
@@ -164,6 +168,7 @@ SENSORS: tuple[KacoSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda d: d.inverter.temperature_cabinet,
+        supported_fn=lambda d: d.inverter.temperature_cabinet is not None,
     ),
     KacoSensorDescription(
         key="temperature_heatsink",
@@ -173,6 +178,7 @@ SENSORS: tuple[KacoSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda d: d.inverter.temperature_heatsink,
+        supported_fn=lambda d: d.inverter.temperature_heatsink is not None,
     ),
 )
 
@@ -257,7 +263,10 @@ async def async_setup_entry(
     coordinator = entry.runtime_data
     descriptions = SENSORS + _mppt_descriptions(coordinator.device)
     async_add_entities(
-        KacoSensor(coordinator, description) for description in descriptions
+        KacoSensor(coordinator, description)
+        for description in descriptions
+        if description.supported_fn is None
+        or description.supported_fn(coordinator.device)
     )
 
 

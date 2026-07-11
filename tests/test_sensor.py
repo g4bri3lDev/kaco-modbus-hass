@@ -80,3 +80,14 @@ async def test_mppt_string_sensors(hass, mock_unit_real, config_entry):
     for suffix in ("mppt_1_dc_energy", "mppt_2_dc_energy"):
         unique_id = f"{serial}_{suffix}"
         assert registry.async_get_entity_id("sensor", "kaco", unique_id) is None
+
+    # Likewise the heatsink temperature point is unimplemented on this unit
+    # (0x8000 sentinel) -> no entity; cabinet temperature is implemented.
+    assert (
+        registry.async_get_entity_id("sensor", "kaco", f"{serial}_temperature_heatsink")
+        is None
+    )
+    assert (
+        registry.async_get_entity_id("sensor", "kaco", f"{serial}_temperature_cabinet")
+        is not None
+    )
