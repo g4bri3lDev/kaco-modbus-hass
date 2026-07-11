@@ -2581,24 +2581,13 @@ wheels = [
 [[package]]
 name = "kaco-modbus"
 version = "0.1.0"
-source = { editable = "../kaco-modbus" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "modbus-connection" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "modbus-connection", specifier = ">=3.4,<4" },
-    { name = "modbus-connection", extras = ["tmodbus"], marker = "extra == 'cli'", specifier = ">=3.4,<4" },
-]
-provides-extras = ["cli"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = ">=1.14" },
-    { name = "pytest", specifier = ">=8" },
-    { name = "pytest-asyncio", specifier = ">=0.24" },
-    { name = "ruff", specifier = ">=0.8" },
+sdist = { url = "https://files.pythonhosted.org/packages/bb/12/11f6aacf7c27bedd0942ef93b9ed6a1226105e0954dfb0af5a1455218728/kaco_modbus-0.1.0.tar.gz", hash = "sha256:2d387cdc27bac958d0af91545168302c928de17cfc3b58c37887fe0358bd145f", size = 8648530, upload-time = "2026-07-11T16:57:01.041Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d7/93/9a0f2a41ecccb70244662a10dc483b99ec8c93778a5874fcedbc7abf4de7/kaco_modbus-0.1.0-py3-none-any.whl", hash = "sha256:d11b32d6d72537315585872ebe5af0a67b24058499f033bd571bbffd11c56b87", size = 17396, upload-time = "2026-07-11T16:56:59.195Z" },
 ]
 
 [[package]]
@@ -2626,7 +2615,7 @@ dev = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "kaco-modbus", editable = "../kaco-modbus" },
+    { name = "kaco-modbus", specifier = ">=0.1,<1" },
     { name = "modbus-connection", specifier = ">=3.4,<4" },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-asyncio", specifier = ">=0.24" },
