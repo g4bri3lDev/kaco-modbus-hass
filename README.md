@@ -1,6 +1,6 @@
 # KACO blueplanet for Home Assistant
 
-A custom integration for Home Assistant that monitors KACO blueplanet inverters via Modbus TCP using the new shared-Modbus framework. Built on the [kaco-modbus](https://github.com/glackermeier/kaco-modbus) device library, this integration provides 15 sensors including real-time power and energy metrics compatible with Home Assistant's Energy Dashboard.
+A custom integration for Home Assistant that monitors KACO blueplanet inverters via Modbus TCP using the new shared-Modbus framework. Built on the [kaco-modbus](https://github.com/g4bri3lDev/kaco-modbus) device library, this integration provides 15 sensors including real-time power and energy metrics compatible with Home Assistant's Energy Dashboard.
 
 ## Prerequisites
 
@@ -21,7 +21,7 @@ To use this integration, you need:
 ### Install the kaco-modbus library (until it's on PyPI)
 
 This integration's `manifest.json` declares a dependency on the
-[`kaco-modbus`](https://github.com/glackermeier/kaco-modbus) device library
+[`kaco-modbus`](https://github.com/g4bri3lDev/kaco-modbus) device library
 (`kaco-modbus>=0.1,<1`). Home Assistant normally resolves `manifest.json`
 requirements by installing them from PyPI when the integration loads —
 **but `kaco-modbus` isn't published to PyPI yet**, so on a stock HA install
@@ -31,7 +31,7 @@ install the library into HA's Python environment yourself:
 - For a **venv install** (e.g. a development HA instance), install
   straight from the repo:
   ```bash
-  pip install git+https://github.com/glackermeier/kaco-modbus.git
+  pip install git+https://github.com/g4bri3lDev/kaco-modbus.git
   ```
   or, for a local checkout you're iterating on:
   ```bash
@@ -52,7 +52,7 @@ Once `kaco-modbus` is published to PyPI this step disappears.
 
 1. Add this repository as a custom repository in HACS:
    - Go to **HACS** → **Integrations** → **⋯** (menu) → **Custom repositories**
-   - Add URL: `https://github.com/glackermeier/kaco-modbus-hass`
+   - Add URL: `https://github.com/g4bri3lDev/kaco-modbus-hass`
    - Category: Integration
 2. Search for "KACO blueplanet" in HACS
 3. Click **Install**
@@ -121,14 +121,14 @@ The `kaco-modbus` library isn't installed/resolvable in Home Assistant's
 Python environment. See [Install the kaco-modbus library](#install-the-kaco-modbus-library-until-its-on-pypi)
 under Prerequisites.
 
-See the [kaco-modbus repository](https://github.com/glackermeier/kaco-modbus) for more debugging information.
+See the [kaco-modbus repository](https://github.com/g4bri3lDev/kaco-modbus) for more debugging information.
 
 ## Development
 
 ### Setup
 
 ```bash
-git clone https://github.com/glackermeier/kaco-modbus-hass
+git clone https://github.com/g4bri3lDev/kaco-modbus-hass
 cd kaco-modbus-hass
 uv sync
 ```
