@@ -74,6 +74,18 @@
       },
       "temperature_heatsink": {
         "name": "Kühlkörpertemperatur"
+      },
+      "mppt_dc_power": {
+        "name": "String {index} Leistung"
+      },
+      "mppt_dc_voltage": {
+        "name": "String {index} Spannung"
+      },
+      "mppt_dc_current": {
+        "name": "String {index} Strom"
+      },
+      "mppt_dc_energy": {
+        "name": "String {index} Energie"
       }
     }
   }

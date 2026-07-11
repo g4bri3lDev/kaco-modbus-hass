@@ -124,6 +124,20 @@ def mock_unit(hass: HomeAssistant) -> MockModbusUnit:
 
 
 @pytest.fixture
+def mock_unit_real(hass: HomeAssistant) -> MockModbusUnit:
+    """A real captured register dump (blueplanet 8.6 TL3 INT, 2 MPPT strings)."""
+    from kaco_modbus.testing import registers_from_dump
+
+    dump_path = Path(__file__).resolve().parent / "fixtures" / "blueplanet_86tl3.json"
+    connection = MockModbusConnection()
+    unit = connection.for_unit(UNIT_ID)
+    for address, value in registers_from_dump(dump_path).items():
+        unit.holding[address] = value
+    hass.data.setdefault(_PROVIDER_UNITS, {})[(CONNECTION_ENTRY_ID, UNIT_ID)] = unit
+    return unit
+
+
+@pytest.fixture
 def config_entry(hass: HomeAssistant) -> MockConfigEntry:
     entry = MockConfigEntry(
         domain="kaco",

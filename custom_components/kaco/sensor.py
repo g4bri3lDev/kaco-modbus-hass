@@ -27,7 +27,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 from kaco_modbus import KacoInverter, OperatingState
 
-from .coordinator import KacoConfigEntry
+from .coordinator import KacoConfigEntry, KacoCoordinator
 from .entity import KacoEntity
 
 
@@ -36,6 +36,7 @@ class KacoSensorDescription(SensorEntityDescription):
     """Describes one KACO sensor."""
 
     value_fn: Callable[[KacoInverter], StateType]
+    translation_placeholders: dict[str, str] | None = None
 
 
 def _state(device: KacoInverter) -> str | None:
@@ -176,6 +177,70 @@ SENSORS: tuple[KacoSensorDescription, ...] = (
 )
 
 
+def _mppt_value(module_index: int, attr: str) -> Callable[[KacoInverter], StateType]:
+    """Read one attribute of one MPPT module, tolerating a shrunk tuple."""
+
+    def _value(device: KacoInverter) -> StateType:
+        if module_index >= len(device.mppt_modules):
+            return None
+        return getattr(device.mppt_modules[module_index], attr)
+
+    return _value
+
+
+def _mppt_descriptions(device: KacoInverter) -> tuple[KacoSensorDescription, ...]:
+    """Per-string sensors for each MPPT module the device advertises."""
+    descriptions: list[KacoSensorDescription] = []
+    for module_index in range(len(device.mppt_modules)):
+        i = module_index + 1
+        placeholders = {"index": str(i)}
+        descriptions.extend(
+            (
+                KacoSensorDescription(
+                    key=f"mppt_{i}_dc_power",
+                    translation_key="mppt_dc_power",
+                    translation_placeholders=placeholders,
+                    device_class=SensorDeviceClass.POWER,
+                    native_unit_of_measurement=UnitOfPower.WATT,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value_fn=_mppt_value(module_index, "dc_power"),
+                ),
+                KacoSensorDescription(
+                    key=f"mppt_{i}_dc_voltage",
+                    translation_key="mppt_dc_voltage",
+                    translation_placeholders=placeholders,
+                    device_class=SensorDeviceClass.VOLTAGE,
+                    native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    entity_registry_enabled_default=False,
+                    value_fn=_mppt_value(module_index, "dc_voltage"),
+                ),
+                KacoSensorDescription(
+                    key=f"mppt_{i}_dc_current",
+                    translation_key="mppt_dc_current",
+                    translation_placeholders=placeholders,
+                    device_class=SensorDeviceClass.CURRENT,
+                    native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    entity_registry_enabled_default=False,
+                    value_fn=_mppt_value(module_index, "dc_current"),
+                ),
+                KacoSensorDescription(
+                    key=f"mppt_{i}_dc_energy",
+                    translation_key="mppt_dc_energy",
+                    translation_placeholders=placeholders,
+                    device_class=SensorDeviceClass.ENERGY,
+                    native_unit_of_measurement=UnitOfEnergy.WATT_HOUR,
+                    suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+                    state_class=SensorStateClass.TOTAL_INCREASING,
+                    entity_registry_enabled_default=False,
+                    value_fn=_mppt_value(module_index, "dc_energy"),
+                ),
+            )
+        )
+    return tuple(descriptions)
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: KacoConfigEntry,
@@ -183,13 +248,23 @@ async def async_setup_entry(
 ) -> None:
     """Set up KACO sensors."""
     coordinator = entry.runtime_data
-    async_add_entities(KacoSensor(coordinator, description) for description in SENSORS)
+    descriptions = SENSORS + _mppt_descriptions(coordinator.device)
+    async_add_entities(
+        KacoSensor(coordinator, description) for description in descriptions
+    )
 
 
 class KacoSensor(KacoEntity, SensorEntity):
     """One value of the inverter."""
 
     entity_description: KacoSensorDescription
+
+    def __init__(
+        self, coordinator: KacoCoordinator, description: KacoSensorDescription
+    ) -> None:
+        super().__init__(coordinator, description)
+        if description.translation_placeholders is not None:
+            self._attr_translation_placeholders = description.translation_placeholders
 
     @property
     def native_value(self) -> StateType:

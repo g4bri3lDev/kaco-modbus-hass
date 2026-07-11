@@ -74,6 +74,18 @@
       },
       "temperature_heatsink": {
         "name": "Heatsink temperature"
+      },
+      "mppt_dc_power": {
+        "name": "String {index} power"
+      },
+      "mppt_dc_voltage": {
+        "name": "String {index} voltage"
+      },
+      "mppt_dc_current": {
+        "name": "String {index} current"
+      },
+      "mppt_dc_energy": {
+        "name": "String {index} energy"
       }
     }
   }
