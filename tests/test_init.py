@@ -21,9 +21,7 @@ async def test_setup(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None
     assert loaded_entry.state is ConfigEntryState.LOADED
 
 
-async def test_device_registry_entry(
-    hass: HomeAssistant, loaded_entry: MockConfigEntry
-) -> None:
+async def test_device_registry_entry(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None:
     """The device is identified by serial, which survives an address change."""
     registry = dr.async_get(hass)
     device = registry.async_get_device(identifiers={(DOMAIN, "8.6TL01736586")})

@@ -55,12 +55,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: KacoConfigEntry) -> bool
     device = KacoInverter(connection.for_unit(entry.data[CONF_UNIT_ID]))
 
     readings = KacoCoordinator(
-        hass, entry, connection, device, device.async_update_readings,
-        READINGS_INTERVAL, "readings",
+        hass,
+        entry,
+        connection,
+        device,
+        device.async_update_readings,
+        READINGS_INTERVAL,
+        "readings",
     )
     settings = KacoCoordinator(
-        hass, entry, connection, device, device.async_update_settings,
-        SETTINGS_INTERVAL, "settings",
+        hass,
+        entry,
+        connection,
+        device,
+        device.async_update_settings,
+        SETTINGS_INTERVAL,
+        "settings",
     )
 
     # Deliberately no on_connection_lost reload: every request connects first,

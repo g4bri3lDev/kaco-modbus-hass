@@ -45,9 +45,7 @@ async def test_a_moved_sunspec_map_reloads_the_entry(
     coordinator = loaded_entry.runtime_data.readings
 
     with (
-        patch.object(
-            coordinator, "_poll", side_effect=SunSpecMapShiftError("moved")
-        ),
+        patch.object(coordinator, "_poll", side_effect=SunSpecMapShiftError("moved")),
         patch.object(hass.config_entries, "async_schedule_reload") as reload,
     ):
         await _poll(hass, freezer)

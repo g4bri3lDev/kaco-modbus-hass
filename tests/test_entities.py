@@ -55,9 +55,7 @@ async def test_one_string_per_mppt_input(
     assert hass.states.get("sensor.blueplanet_8_6_tl3_int_string_3_power") is None
 
 
-async def test_controls_are_opt_in(
-    hass: HomeAssistant, loaded_entry: MockConfigEntry
-) -> None:
+async def test_controls_are_opt_in(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None:
     """Nothing that writes to a live inverter is enabled without asking."""
     registry = er.async_get(hass)
     writable = [

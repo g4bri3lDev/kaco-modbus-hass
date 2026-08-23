@@ -15,9 +15,7 @@ if TYPE_CHECKING:
 SERIAL = "8.6TL01736586"
 
 
-async def test_it_describes_the_device(
-    hass: HomeAssistant, loaded_entry: MockConfigEntry
-) -> None:
+async def test_it_describes_the_device(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None:
     result = await async_get_config_entry_diagnostics(hass, loaded_entry)
 
     assert result["device"]["model"] == "blueplanet 8.6 TL3 INT"
@@ -27,9 +25,7 @@ async def test_it_describes_the_device(
     assert 103 in result["device"]["models"]
 
 
-async def test_it_reports_what_was_read(
-    hass: HomeAssistant, loaded_entry: MockConfigEntry
-) -> None:
+async def test_it_reports_what_was_read(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None:
     result = await async_get_config_entry_diagnostics(hass, loaded_entry)
 
     assert "inverter" in result["readings"]["updated"]
@@ -69,7 +65,5 @@ class TestRedaction:
         result = await async_get_config_entry_diagnostics(hass, loaded_entry)
 
         registers = result["registers"]["holding"]
-        decoded = b"".join(
-            value.to_bytes(2, "big") for _, value in sorted(registers.items())
-        )
+        decoded = b"".join(value.to_bytes(2, "big") for _, value in sorted(registers.items()))
         assert SERIAL.encode() not in decoded

@@ -72,9 +72,7 @@ SWITCHES: tuple[KacoSwitchDescription, ...] = (
         translation_key="reactive_power",
         entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
-        is_on_fn=lambda device: (
-            getattr(device.controls, "v_ar_pct_ena", None) is VArPctEna.ENABLED
-        ),
+        is_on_fn=lambda device: getattr(device.controls, "v_ar_pct_ena", None) is VArPctEna.ENABLED,
         set_fn=lambda device, on: (
             device.async_set_reactive_power(getattr(device.controls, "v_ar_w_max_pct", None) or 0.0)
             if on
@@ -111,9 +109,7 @@ class KacoSwitch(KacoEntity, SwitchEntity):
 
     entity_description: KacoSwitchDescription
 
-    def __init__(
-        self, coordinator: KacoCoordinator, description: KacoSwitchDescription
-    ) -> None:
+    def __init__(self, coordinator: KacoCoordinator, description: KacoSwitchDescription) -> None:
         """Set up a switch backed by the controls component."""
         super().__init__(coordinator, description, "controls")
 

@@ -61,8 +61,16 @@ def test_every_entity_translation_key_is_defined() -> None:
     used: set[tuple[str, str]] = set()
 
     for platform, descriptions in (
-        ("sensor", (*sensor.SENSORS, *sensor.PHASE_SENSORS, *sensor.CURRENT_SENSORS,
-                    sensor.ENERGY, *sensor.DIAGNOSTICS)),
+        (
+            "sensor",
+            (
+                *sensor.SENSORS,
+                *sensor.PHASE_SENSORS,
+                *sensor.CURRENT_SENSORS,
+                sensor.ENERGY,
+                *sensor.DIAGNOSTICS,
+            ),
+        ),
         ("number", number.NUMBERS),
         ("switch", switch.SWITCHES),
         ("select", (select.DESCRIPTION,)),

@@ -96,9 +96,7 @@ class KacoNumber(KacoEntity, NumberEntity):
 
     entity_description: KacoNumberDescription
 
-    def __init__(
-        self, coordinator: KacoCoordinator, description: KacoNumberDescription
-    ) -> None:
+    def __init__(self, coordinator: KacoCoordinator, description: KacoNumberDescription) -> None:
         """Set up a setpoint backed by the controls component."""
         super().__init__(coordinator, description, "controls")
 

@@ -322,9 +322,7 @@ class KacoSensor(KacoEntity, SensorEntity):
 
     entity_description: KacoSensorDescription
 
-    def __init__(
-        self, coordinator: KacoCoordinator, description: KacoSensorDescription
-    ) -> None:
+    def __init__(self, coordinator: KacoCoordinator, description: KacoSensorDescription) -> None:
         """Set up a sensor reading from its description's sub-system."""
         super().__init__(coordinator, description, description.sub_system)
 
@@ -367,9 +365,7 @@ class KacoEnergySensor(KacoEntity, RestoreSensor):
 
     entity_description: KacoSensorDescription
 
-    def __init__(
-        self, coordinator: KacoCoordinator, description: KacoSensorDescription
-    ) -> None:
+    def __init__(self, coordinator: KacoCoordinator, description: KacoSensorDescription) -> None:
         """Set up the lifetime energy total."""
         super().__init__(coordinator, description, description.sub_system)
 

@@ -47,9 +47,7 @@ async def async_setup_entry(
 class KacoReactivePowerMode(KacoEntity, SelectEntity):
     """Whether a reactive power setpoint is a percentage of WMax or VArMax."""
 
-    def __init__(
-        self, coordinator: KacoCoordinator, description: SelectEntityDescription
-    ) -> None:
+    def __init__(self, coordinator: KacoCoordinator, description: SelectEntityDescription) -> None:
         """Set up the mode selector backed by the controls component."""
         super().__init__(coordinator, description, "controls")
 
