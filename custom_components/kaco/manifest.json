@@ -19,5 +19,5 @@
     "kaco-modbus==1.0.1",
     "modbus-connection[tmodbus]>=4.8.1,<5"
   ],
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
