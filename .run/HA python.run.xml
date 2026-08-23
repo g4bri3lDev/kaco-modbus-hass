@@ -1,0 +1,28 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="HA python" type="PythonConfigurationType" factoryName="Python">
+        <option name="ENV_FILES" value="" />
+        <option name="INTERPRETER_OPTIONS" value="" />
+        <option name="PARENT_ENVS" value="false" />
+        <envs>
+            <env name="PYTHONUNBUFFERED" value="1" />
+            <env name=" PYTHONASYNCIODEBUG" value="1" />
+            <env name="VIRTUAL_ENV" value="$USER_HOME$/Developer/Home_Assistant/core/.venv" />
+        </envs>
+        <option name="SDK_HOME" value="" />
+        <option name="SDK_NAME" value="core HA" />
+        <option name="WORKING_DIRECTORY" value="$USER_HOME$/Developer/Home_Assistant/core" />
+        <option name="IS_MODULE_SDK" value="false" />
+        <option name="ADD_CONTENT_ROOTS" value="false" />
+        <option name="ADD_SOURCE_ROOTS" value="false" />
+        <option name="DEBUG_JUST_MY_CODE" value="true" />
+        <option name="RUN_TOOL" value="true" />
+        <option name="SCRIPT_NAME" value="$USER_HOME$/Developer/Home_Assistant/core/.venv/bin/hass" />
+        <option name="PARAMETERS" value="-c config" />
+        <option name="SHOW_COMMAND_LINE" value="false" />
+        <option name="EMULATE_TERMINAL" value="false" />
+        <option name="MODULE_MODE" value="false" />
+        <option name="REDIRECT_INPUT" value="false" />
+        <option name="INPUT_FILE" value="" />
+        <method v="2" />
+    </configuration>
+</component>

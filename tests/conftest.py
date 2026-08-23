@@ -90,7 +90,7 @@ def config_entry() -> MockConfigEntry:
     return MockConfigEntry(
         domain=DOMAIN,
         title="blueplanet 8.6 TL3 INT",
-        unique_id="8.6TL01736586",
+        unique_id="8.6TL00000000",
         data={CONF_HOST: "192.0.2.10", CONF_PORT: 502, CONF_UNIT_ID: 1},
     )
 

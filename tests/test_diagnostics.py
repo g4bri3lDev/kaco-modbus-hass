@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-SERIAL = "8.6TL01736586"
+SERIAL = "8.6TL00000000"
 
 
 async def test_it_describes_the_device(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None:

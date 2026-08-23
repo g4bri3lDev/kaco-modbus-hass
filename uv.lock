@@ -1880,7 +1880,7 @@ dev = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "kaco-modbus", specifier = "==1.0.0" },
+    { name = "kaco-modbus", specifier = "==1.0.1" },
     { name = "modbus-connection", extras = ["tmodbus"], specifier = ">=4.8.1,<5" },
     { name = "mypy", specifier = ">=1.13" },
     { name = "pytest-homeassistant-custom-component", specifier = ">=0.13" },
@@ -1889,14 +1889,14 @@ dev = [
 
 [[package]]
 name = "kaco-modbus"
-version = "1.0.0"
+version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "modbus-connection" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/21/af/b6a90dcc861c60dfe71e4137ea6be8e6fd883025fbb51c208fb5e764079d/kaco_modbus-1.0.0.tar.gz", hash = "sha256:6b5a4522f69af4578146e9b48827f84172ce5bf670b4f28b216efef4c13ff646", size = 78277, upload-time = "2026-08-23T18:01:54.922Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/03/5c/5b2a9aae094d6cb6ee91ac6a84fecbd8cb25c9143b40b08ef32c6ab25ddc/kaco_modbus-1.0.1.tar.gz", hash = "sha256:c818a747e6e56c0015f8345caf3e9074b2ec44ad975687f7923ea8f6a7762066", size = 82357, upload-time = "2026-08-23T21:31:16.833Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/59/c3/e4c4cede4739a89547d9dedf2a5926c3d53a01778dbabb2755742185deb1/kaco_modbus-1.0.0-py3-none-any.whl", hash = "sha256:81e097b0ff8331c44358ad2b770afb68373e68f6b13417145682ac14cd90f145", size = 33049, upload-time = "2026-08-23T18:01:53.755Z" },
+    { url = "https://files.pythonhosted.org/packages/0f/15/a0808ec39f98feaf16d2c9d07fc298a5cf1ca941f72b5a4746b9ea49f4c7/kaco_modbus-1.0.1-py3-none-any.whl", hash = "sha256:670046419afd0aa430e474f6ec128931676c75ad3310c244d36be95218a47634", size = 35280, upload-time = "2026-08-23T21:31:15.706Z" },
 ]
 
 [[package]]

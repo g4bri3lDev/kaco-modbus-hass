@@ -38,8 +38,16 @@ want them.
 
 ### Night-time behaviour
 
-A grid-tied inverter stops answering after dark, while still accepting the TCP
-connection. The integration expects this:
+Unlike most inverters, a KACO keeps answering Modbus after dark — it just stops
+*measuring*, parking the registers it no longer reads at zero. Left alone it would
+report 0 Hz and 0 V for a grid that is plainly still live, and 0 °C for a cabinet that
+was at 46 °C in the afternoon.
+
+So grid frequency, the three phase voltages, temperature and power factor go **unknown**
+overnight rather than reporting a false zero. Power, current and energy stay at zero,
+because for those zero is simply the truth.
+
+The rest of the handling covers inverters that *do* go silent:
 
 - readings go unavailable, and come back at sunrise without a reload;
 - **total energy produced holds its last value** rather than going unavailable, so the

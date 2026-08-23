@@ -11,7 +11,7 @@ package = false
 
 [dependency-groups]
 dev = [
-    "kaco-modbus==1.0.0",
+    "kaco-modbus==1.0.1",
     "modbus-connection[tmodbus]>=4.8.1,<5",
     "pytest-homeassistant-custom-component>=0.13",
     "mypy>=1.13",

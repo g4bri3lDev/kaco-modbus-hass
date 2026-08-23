@@ -6,8 +6,9 @@ from typing import TYPE_CHECKING
 
 import pytest
 from freezegun.api import FrozenDateTimeFactory
-from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN
 from homeassistant.helpers import entity_registry as er
+from kaco_modbus.testing import BLUEPLANET_86TL3_ASLEEP
 from modbus_connection import ModbusTimeoutError
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
@@ -122,3 +123,66 @@ class TestWhenTheInverterSleeps:
         await hass.async_block_till_done()
 
         assert hass.states.get(POWER).state == "1000"
+
+
+class TestAsleep:
+    """What Home Assistant shows once the sun goes down.
+
+    The inverter keeps answering, so nothing goes unavailable — but the
+    readings it stops taking must not be published as plausible-looking
+    zeros. See kaco-modbus docs/quirks.md.
+    """
+
+    @pytest.fixture(autouse=True)
+    def _asleep(self, inverter: InverterServer) -> None:
+        inverter.registers = dict(BLUEPLANET_86TL3_ASLEEP)
+
+    @pytest.mark.parametrize(
+        "entity_id",
+        [
+            "sensor.blueplanet_8_6_tl3_int_grid_frequency",
+            "sensor.blueplanet_8_6_tl3_int_voltage_l1",
+            "sensor.blueplanet_8_6_tl3_int_voltage_l2",
+            "sensor.blueplanet_8_6_tl3_int_voltage_l3",
+            "sensor.blueplanet_8_6_tl3_int_temperature",
+        ],
+    )
+    async def test_unmeasured_readings_are_withheld(
+        self, hass: HomeAssistant, loaded_entry: MockConfigEntry, entity_id: str
+    ) -> None:
+        """0 Hz and 0 V would look like a grid outage every night."""
+        state = hass.states.get(entity_id)
+        assert state is not None
+        assert state.state == STATE_UNKNOWN
+
+    @pytest.mark.parametrize(
+        ("entity_id", "expected"),
+        [
+            ("sensor.blueplanet_8_6_tl3_int_ac_power", "0"),
+            ("sensor.blueplanet_8_6_tl3_int_dc_power", "0"),
+            ("sensor.blueplanet_8_6_tl3_int_string_1_power", "0"),
+        ],
+    )
+    async def test_genuine_zeros_are_kept(
+        self,
+        hass: HomeAssistant,
+        loaded_entry: MockConfigEntry,
+        entity_id: str,
+        expected: str,
+    ) -> None:
+        """Producing nothing really is zero, and must still be reported."""
+        assert hass.states.get(entity_id).state == expected
+
+    async def test_it_reports_sleeping(
+        self, hass: HomeAssistant, loaded_entry: MockConfigEntry
+    ) -> None:
+        state = hass.states.get("sensor.blueplanet_8_6_tl3_int_operating_state")
+        assert state.state == "sleeping"
+
+    async def test_lifetime_energy_still_reports(
+        self, hass: HomeAssistant, loaded_entry: MockConfigEntry
+    ) -> None:
+        """The Energy dashboard must not gain a gap overnight."""
+        state = hass.states.get(ENERGY)
+        assert state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE)
+        assert float(state.state) > 12000

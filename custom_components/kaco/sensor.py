@@ -46,6 +46,15 @@ class KacoSensorDescription(SensorEntityDescription):
     sub_system: str
 
 
+def _phase_voltage(index: int) -> Callable[[KacoInverter], StateType]:
+    """Read one phase-to-neutral voltage, by 1-based phase number."""
+
+    def value(device: KacoInverter) -> StateType:
+        return device.phase_voltages[index - 1]
+
+    return value
+
+
 def _inverter(name: str) -> Callable[[KacoInverter], StateType]:
     """Read a field off the inverter block."""
 
@@ -91,7 +100,7 @@ SENSORS: tuple[KacoSensorDescription, ...] = (
         device_class=SensorDeviceClass.POWER_FACTOR,
         state_class=SensorStateClass.MEASUREMENT,
         entity_registry_enabled_default=False,
-        value_fn=_inverter("pf"),
+        value_fn=lambda device: device.power_factor,
         sub_system="inverter",
     ),
     KacoSensorDescription(
@@ -101,7 +110,7 @@ SENSORS: tuple[KacoSensorDescription, ...] = (
         native_unit_of_measurement=UnitOfFrequency.HERTZ,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
-        value_fn=_inverter("hz"),
+        value_fn=lambda device: device.frequency,
         sub_system="inverter",
     ),
     KacoSensorDescription(
@@ -151,7 +160,7 @@ SENSORS: tuple[KacoSensorDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=1,
-        value_fn=_inverter("tmp_cab"),
+        value_fn=lambda device: device.temperature,
         sub_system="inverter",
     ),
     KacoSensorDescription(
@@ -187,10 +196,11 @@ PHASE_SENSORS: tuple[KacoSensorDescription, ...] = tuple(
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=1,
-        value_fn=_inverter(field),
+        # Withheld while asleep: the register reads 0 V for a live grid.
+        value_fn=_phase_voltage(index),
         sub_system="inverter",
     )
-    for index, field in ((1, "ph_vph_a"), (2, "ph_vph_b"), (3, "ph_vph_c"))
+    for index in (1, 2, 3)
 )
 
 CURRENT_SENSORS: tuple[KacoSensorDescription, ...] = tuple(

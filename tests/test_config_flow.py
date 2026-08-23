@@ -32,7 +32,7 @@ async def test_a_successful_setup(hass: HomeAssistant, inverter: InverterServer)
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["title"] == "blueplanet 8.6 TL3 INT"
     assert result["data"] == USER_INPUT
-    assert result["result"].unique_id == "8.6TL01736586"
+    assert result["result"].unique_id == "8.6TL00000000"
 
 
 async def test_nothing_at_that_address(hass: HomeAssistant, inverter: InverterServer) -> None:
