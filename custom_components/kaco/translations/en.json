@@ -1,0 +1,150 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Enter the address of your KACO inverter. Modbus TCP must be enabled on the inverter itself, under the SunSpec or Modbus protocol settings.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "unit_id": "Unit ID"
+        },
+        "data_description": {
+          "host": "The inverter's hostname or IP address.",
+          "port": "The Modbus TCP port. KACO inverters use 502 unless changed.",
+          "unit_id": "Leave at 1 unless the inverter is reached through an RS485-to-TCP gateway, which needs the address configured on that gateway."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "not_a_kaco_inverter": "Something answered, but it is not a SunSpec inverter. Check that Modbus TCP is enabled on the inverter and that the address belongs to it."
+    },
+    "abort": {
+      "already_configured": "Device is already configured"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "ac_power": {
+        "name": "AC power"
+      },
+      "apparent_power": {
+        "name": "Apparent power"
+      },
+      "reactive_power": {
+        "name": "Reactive power"
+      },
+      "power_factor": {
+        "name": "Power factor"
+      },
+      "frequency": {
+        "name": "Grid frequency"
+      },
+      "ac_current": {
+        "name": "AC current"
+      },
+      "dc_power": {
+        "name": "DC power"
+      },
+      "dc_voltage": {
+        "name": "DC voltage"
+      },
+      "dc_current": {
+        "name": "DC current"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "lifetime_energy": {
+        "name": "Total energy produced"
+      },
+      "rated_power": {
+        "name": "Rated power"
+      },
+      "power_limit": {
+        "name": "Power limit"
+      },
+      "voltage_l1": {
+        "name": "Voltage L1"
+      },
+      "voltage_l2": {
+        "name": "Voltage L2"
+      },
+      "voltage_l3": {
+        "name": "Voltage L3"
+      },
+      "current_l1": {
+        "name": "Current L1"
+      },
+      "current_l2": {
+        "name": "Current L2"
+      },
+      "current_l3": {
+        "name": "Current L3"
+      },
+      "string_power": {
+        "name": "String {number} power"
+      },
+      "string_voltage": {
+        "name": "String {number} voltage"
+      },
+      "string_current": {
+        "name": "String {number} current"
+      },
+      "operating_state": {
+        "name": "Operating state",
+        "state": {
+          "off": "Off",
+          "sleeping": "Asleep",
+          "starting": "Starting up",
+          "mppt": "Producing",
+          "throttled": "Throttled",
+          "shutting_down": "Shutting down",
+          "fault": "Fault",
+          "standby": "Standby"
+        }
+      }
+    },
+    "number": {
+      "power_limit_setpoint": {
+        "name": "Power limit"
+      },
+      "power_factor_setpoint": {
+        "name": "Power factor setpoint"
+      },
+      "reactive_power_setpoint": {
+        "name": "Reactive power setpoint"
+      }
+    },
+    "switch": {
+      "power_limit": {
+        "name": "Limit power output"
+      },
+      "fixed_power_factor": {
+        "name": "Fixed power factor"
+      },
+      "reactive_power": {
+        "name": "Reactive power control"
+      },
+      "grid_connection": {
+        "name": "Grid connection"
+      }
+    },
+    "select": {
+      "reactive_power_mode": {
+        "name": "Reactive power mode",
+        "state": {
+          "none": "Not set",
+          "wmax": "Percent of maximum power",
+          "varmax": "Percent of maximum reactive power",
+          "varaval": "Percent of available reactive power"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "write_failed": {
+      "message": "The inverter rejected the change: {error}"
+    }
+  }
+}

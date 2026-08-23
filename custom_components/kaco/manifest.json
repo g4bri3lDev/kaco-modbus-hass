@@ -1,0 +1,17 @@
+{
+  "domain": "kaco",
+  "name": "KACO new energy",
+  "codeowners": ["@g4bri3lDev"],
+  "config_flow": true,
+  "documentation": "https://github.com/g4bri3lDev/kaco-modbus-hass",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/g4bri3lDev/kaco-modbus-hass/issues",
+  "loggers": ["kaco_modbus", "modbus_connection", "tmodbus"],
+  "requirements": [
+    "tmodbus>=0.5.1",
+    "kaco-modbus==1.0.0",
+    "modbus-connection[tmodbus]>=4.8.1,<5"
+  ],
+  "version": "1.0.0"
+}

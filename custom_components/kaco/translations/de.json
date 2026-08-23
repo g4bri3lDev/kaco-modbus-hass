@@ -1,0 +1,92 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Gib die Adresse deines KACO-Wechselrichters ein. Modbus TCP muss am Wechselrichter selbst aktiviert sein, unter den SunSpec- bzw. Modbus-Protokolleinstellungen.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "unit_id": "Geräte-ID"
+        },
+        "data_description": {
+          "host": "Hostname oder IP-Adresse des Wechselrichters.",
+          "port": "Der Modbus-TCP-Port. KACO-Wechselrichter verwenden 502, sofern nicht geändert.",
+          "unit_id": "Auf 1 belassen, außer der Wechselrichter wird über einen RS485-zu-TCP-Adapter erreicht — dann die dort eingestellte Adresse verwenden."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "not_a_kaco_inverter": "Es hat etwas geantwortet, aber es ist kein SunSpec-Wechselrichter. Prüfe, ob Modbus TCP am Wechselrichter aktiviert ist und die Adresse wirklich zu ihm gehört."
+    },
+    "abort": {
+      "already_configured": "Gerät ist bereits konfiguriert"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "ac_power": { "name": "AC-Leistung" },
+      "apparent_power": { "name": "Scheinleistung" },
+      "reactive_power": { "name": "Blindleistung" },
+      "power_factor": { "name": "Leistungsfaktor" },
+      "frequency": { "name": "Netzfrequenz" },
+      "ac_current": { "name": "AC-Strom" },
+      "dc_power": { "name": "DC-Leistung" },
+      "dc_voltage": { "name": "DC-Spannung" },
+      "dc_current": { "name": "DC-Strom" },
+      "temperature": { "name": "Temperatur" },
+      "lifetime_energy": { "name": "Erzeugte Gesamtenergie" },
+      "rated_power": { "name": "Nennleistung" },
+      "power_limit": { "name": "Leistungsbegrenzung" },
+      "voltage_l1": { "name": "Spannung L1" },
+      "voltage_l2": { "name": "Spannung L2" },
+      "voltage_l3": { "name": "Spannung L3" },
+      "current_l1": { "name": "Strom L1" },
+      "current_l2": { "name": "Strom L2" },
+      "current_l3": { "name": "Strom L3" },
+      "string_power": { "name": "String {number} Leistung" },
+      "string_voltage": { "name": "String {number} Spannung" },
+      "string_current": { "name": "String {number} Strom" },
+      "operating_state": {
+        "name": "Betriebszustand",
+        "state": {
+          "off": "Aus",
+          "sleeping": "Ruhezustand",
+          "starting": "Startet",
+          "mppt": "Einspeisung",
+          "throttled": "Abgeregelt",
+          "shutting_down": "Fährt herunter",
+          "fault": "Störung",
+          "standby": "Bereitschaft"
+        }
+      }
+    },
+    "number": {
+      "power_limit_setpoint": { "name": "Leistungsbegrenzung" },
+      "power_factor_setpoint": { "name": "Sollwert Leistungsfaktor" },
+      "reactive_power_setpoint": { "name": "Sollwert Blindleistung" }
+    },
+    "switch": {
+      "power_limit": { "name": "Leistung begrenzen" },
+      "fixed_power_factor": { "name": "Fester Leistungsfaktor" },
+      "reactive_power": { "name": "Blindleistungsregelung" },
+      "grid_connection": { "name": "Netzverbindung" }
+    },
+    "select": {
+      "reactive_power_mode": {
+        "name": "Blindleistungsmodus",
+        "state": {
+          "none": "Nicht gesetzt",
+          "wmax": "Prozent der Maximalleistung",
+          "varmax": "Prozent der maximalen Blindleistung",
+          "varaval": "Prozent der verfügbaren Blindleistung"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "write_failed": {
+      "message": "Der Wechselrichter hat die Änderung abgelehnt: {error}"
+    }
+  }
+}
