@@ -9,14 +9,9 @@ dependencies = []
 [tool.uv]
 package = false
 
-[tool.uv.sources]
-# Developed side by side with the library, so a change there is picked up
-# without a release.
-kaco-modbus = { path = "../../../kaco-modbus", editable = true }
-
 [dependency-groups]
 dev = [
-    "kaco-modbus",
+    "kaco-modbus==1.0.0",
     "modbus-connection[tmodbus]>=4.8.1,<5",
     "pytest-homeassistant-custom-component>=0.13",
     "mypy>=1.13",
