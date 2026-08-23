@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/g4bri3lDev/kaco-modbus-hass/compare/v1.0.0...v1.0.1) (2026-08-23)
+
+
+### Bug fixes
+
+* stop publishing readings the inverter parks at zero overnight ([1c104ea](https://github.com/g4bri3lDev/kaco-modbus-hass/commit/1c104ea787afb606a37b11b8e1ac6ceb2127f782))
+
 ## 1.0.0 (2026-08-23)
 
 
