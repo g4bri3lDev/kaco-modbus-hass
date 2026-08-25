@@ -1,8 +1,8 @@
-"""The KACO integration.
+"""The KACO Modbus integration.
 
-The config entry owns the Modbus connection; the library only ever sees a
-``ModbusUnit``. That is the shape Home Assistant's shared-connection work
-expects, so adopting it later is a change to this file alone.
+Home Assistant's ``modbus`` integration owns the connection and hands out a
+``ModbusUnit`` on it. Consumers of one device therefore share a single link,
+which matters here: a KACO accepts only one Modbus client at a time.
 """
 
 from __future__ import annotations
@@ -10,11 +10,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from homeassistant.components.modbus import async_get_unit
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, Platform
 from homeassistant.exceptions import ConfigEntryNotReady
 from modbus_connection import ModbusError, ModbusTcpParams
-from modbus_connection.tmodbus import ModbusConnection
 
 from kaco_modbus import KacoInverter
 
@@ -46,19 +46,21 @@ type KacoConfigEntry = ConfigEntry[KacoData]
 
 async def async_setup_entry(hass: HomeAssistant, entry: KacoConfigEntry) -> bool:
     """Set up KACO from a config entry."""
-    connection = ModbusConnection(
-        ModbusTcpParams(host=entry.data[CONF_HOST], port=entry.data[CONF_PORT])
+    # The modbus integration owns the connection and closes it behind the last
+    # entry holding a unit on it, registering that release on this entry — so
+    # there is deliberately nothing to close here.
+    unit = async_get_unit(
+        hass,
+        entry,
+        ModbusTcpParams(host=entry.data[CONF_HOST], port=entry.data[CONF_PORT]),
+        entry.data[CONF_UNIT_ID],
     )
-    # Registered before anything can fail, so a half-finished setup still
-    # closes the socket.
-    entry.async_on_unload(connection.close)
-
-    device = KacoInverter(connection.for_unit(entry.data[CONF_UNIT_ID]))
+    device = KacoInverter(unit)
 
     readings = KacoCoordinator(
         hass,
         entry,
-        connection,
+        unit,
         device,
         device.async_update_readings,
         READINGS_INTERVAL,
@@ -67,15 +69,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: KacoConfigEntry) -> bool
     settings = KacoCoordinator(
         hass,
         entry,
-        connection,
+        unit,
         device,
         device.async_update_settings,
         SETTINGS_INTERVAL,
         "settings",
     )
 
-    # Deliberately no on_connection_lost reload: every request connects first,
-    # so a dropped link heals on the next poll.
+    # Deliberately no reload on a dropped connection: every request connects
+    # first, so a broken link heals on the next poll.
     try:
         await readings.async_config_entry_first_refresh()
         await settings.async_config_entry_first_refresh()

@@ -5,16 +5,19 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import voluptuous as vol
+from homeassistant.components.modbus import async_get_temporary_unit
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_HOST, CONF_PORT
+from homeassistant.exceptions import HomeAssistantError
 from modbus_connection import ModbusError, ModbusTcpParams
-from modbus_connection.tmodbus import ModbusConnection
 
 from kaco_modbus import KacoError, KacoInverter
 
 from .const import CONF_UNIT_ID, DEFAULT_PORT, DEFAULT_UNIT_ID, DOMAIN
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+
     from kaco_modbus import DeviceInfo
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
@@ -26,20 +29,21 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 )
 
 
-async def _async_probe(host: str, port: int, unit_id: int) -> DeviceInfo:
+async def _async_probe(hass: HomeAssistant, host: str, port: int, unit_id: int) -> DeviceInfo:
     """Read the inverter's identity, or raise trying.
 
-    Opens a connection of its own and closes it again: the entry is not set up
-    yet, and most Modbus devices refuse a second concurrent client.
+    There is no config entry yet to hold a unit against, so the modbus
+    integration lends one for the length of the probe. If another entry
+    already holds a connection to this device it is reused and left open,
+    which matters here: a KACO accepts only one client at a time.
     """
-    connection = ModbusConnection(ModbusTcpParams(host=host, port=port))
-    try:
-        device = KacoInverter(connection.for_unit(unit_id))
+    async with async_get_temporary_unit(
+        hass, ModbusTcpParams(host=host, port=port), unit_id
+    ) as unit:
+        device = KacoInverter(unit)
         await device.async_update_readings()
         assert device.info is not None
         return device.info
-    finally:
-        await connection.close()
 
 
 class KacoConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -54,6 +58,7 @@ class KacoConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 info = await _async_probe(
+                    self.hass,
                     user_input[CONF_HOST],
                     user_input[CONF_PORT],
                     user_input[CONF_UNIT_ID],
@@ -61,6 +66,10 @@ class KacoConfigFlow(ConfigFlow, domain=DOMAIN):
             except KacoError:
                 # Something answered Modbus, but it is not a SunSpec inverter.
                 errors["base"] = "not_a_kaco_inverter"
+            except HomeAssistantError:
+                # The device is already held over different link settings,
+                # which cannot both be honoured on one connection.
+                errors["base"] = "already_in_use"
             except ModbusError:
                 errors["base"] = "cannot_connect"
             else:

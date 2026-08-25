@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from datetime import timedelta
 
     from homeassistant.core import HomeAssistant
-    from modbus_connection import ModbusConnection
+    from modbus_connection import ModbusUnit
 
     from kaco_modbus import KacoInverter, UpdateReport
 
@@ -38,7 +38,7 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
         self,
         hass: HomeAssistant,
         entry: KacoConfigEntry,
-        connection: ModbusConnection,
+        unit: ModbusUnit,
         device: KacoInverter,
         poll: Callable[[], Awaitable[UpdateReport]],
         interval: timedelta,
@@ -54,27 +54,27 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
         )
         self.entry = entry
         self.device = device
-        self._connection = connection
+        self._unit = unit
         self._poll = poll
         self._failed: frozenset[str] = frozenset()
         self._timeouts = 0
 
     async def _async_note_timeout(self) -> None:
-        """Count a silent poll, and drop a link that has stopped answering.
+        """Count a silent poll, and recycle a link that has stopped answering.
 
-        A grid-tied inverter after dark accepts the TCP connection and then
-        answers nothing, so the socket looks healthy and nothing would ever
-        reopen it. After enough silence, close it: the next poll connects
-        again from scratch.
+        Safe on a shared connection: disconnect is a passthrough that leaves
+        the connection owned by the modbus integration, which rebuilds it on
+        the next request. Closing it is deliberately not possible from a unit,
+        so one consumer cannot take it away from the others.
         """
         self._timeouts += 1
         if self._timeouts >= TIMEOUTS_BEFORE_DISCONNECT:
             _LOGGER.debug(
-                "No answer from %s after %s attempts; dropping the connection",
+                "No answer from %s after %s attempts; recycling the link",
                 self.entry.title,
                 self._timeouts,
             )
-            await self._connection.disconnect()
+            await self._unit.disconnect()
             self._timeouts = 0
 
     async def _async_update_data(self) -> UpdateReport:
