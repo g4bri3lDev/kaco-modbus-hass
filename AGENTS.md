@@ -22,10 +22,18 @@ The domain is `kaco`, not `kaco_modbus` — named for the device, not the
 transport, per Home Assistant guidance. **A domain cannot be changed**: it is
 also the `custom_components/` directory name and must be importable.
 
-`kaco_powador` is reserved for the older Powador inverters, which speak a
-proprietary RS485 protocol and will never work here. A site can mix the two
-generations, in which case only the Modbus inverters appear through this
-integration and the Energy dashboard sees a part of the plant.
+`kaco_rs485` is the sibling integration, for KACO's proprietary serial
+protocol. The split is by **transport, not by hardware generation**: a
+blueplanet TL3 speaks both, and the legacy protocol reaches modern units too
+(its specification covers the blueplanet 100/125 NX3).
+
+Where an inverter offers both, **this integration is the one to use** — Modbus
+TCP needs a LAN cable and a setting, where the serial route needs an adapter
+wired to the bus. The serial integration is for inverters that have no Modbus
+at all.
+
+A site can therefore mix the two, in which case only the Modbus inverters
+appear here and the Energy dashboard sees part of the plant.
 
 ## The library is pinned exactly
 
