@@ -18,9 +18,14 @@ and the repository the way Home Assistant and HACS will.
 
 ## Domain
 
-The domain is `kaco`, not `kaco_modbus` — named for the device, not the
-transport, per Home Assistant guidance. **A domain cannot be changed**: it is
+The domain is `kaco`, not `kaco_modbus`. **A domain cannot be changed**: it is
 also the `custom_components/` directory name and must be importable.
+
+"Name the domain after the device, not the transport" comes from
+modbus-connection's Home Assistant guidance, not from Home Assistant itself —
+core's manifest documentation says nothing about it, and core contains 21
+`*_ble` domains, including `hue_ble` alongside `hue`. It is a good default, and
+naming the transport is accepted where the transport is the real distinction.
 
 `kaco_rs485` is the sibling integration, for KACO's proprietary serial
 protocol. The split is by **transport, not by hardware generation**: a
