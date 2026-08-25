@@ -17,7 +17,8 @@
     },
     "error": {
       "cannot_connect": "Failed to connect",
-      "not_a_kaco_inverter": "Something answered, but it is not a SunSpec inverter. Check that Modbus TCP is enabled on the inverter and that the address belongs to it."
+      "not_a_kaco_inverter": "Something answered, but it is not a SunSpec inverter. Check that Modbus TCP is enabled on the inverter and that the address belongs to it.",
+      "already_in_use": "This inverter is already in use with different connection settings, which cannot both be used on one connection."
     },
     "abort": {
       "already_configured": "Device is already configured"
