@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntryState
 from homeassistant.helpers import device_registry as dr
 from modbus_connection import ModbusTimeoutError
 
-from custom_components.kaco.const import DOMAIN
+from custom_components.kaco_modbus.const import DOMAIN
 
 from .conftest import InverterServer
 

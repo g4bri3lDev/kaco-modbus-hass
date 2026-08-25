@@ -3,13 +3,13 @@
   "packages": {
     ".": {
       "release-type": "simple",
-      "package-name": "kaco",
+      "package-name": "kaco-modbus-hass",
       "changelog-path": "CHANGELOG.md",
       "include-component-in-tag": false,
       "extra-files": [
         {
           "type": "json",
-          "path": "custom_components/kaco/manifest.json",
+          "path": "custom_components/kaco_modbus/manifest.json",
           "jsonpath": "$.version"
         }
       ],

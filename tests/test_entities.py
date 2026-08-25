@@ -12,7 +12,7 @@ from kaco_modbus.testing import BLUEPLANET_86TL3_ASLEEP
 from modbus_connection import ModbusTimeoutError
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from custom_components.kaco.const import READINGS_INTERVAL
+from custom_components.kaco_modbus.const import READINGS_INTERVAL
 
 from .conftest import InverterServer
 

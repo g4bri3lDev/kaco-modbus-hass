@@ -11,7 +11,7 @@ from kaco_modbus import SunSpecMapShiftError
 from modbus_connection import ModbusTimeoutError
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from custom_components.kaco.const import READINGS_INTERVAL, TIMEOUTS_BEFORE_DISCONNECT
+from custom_components.kaco_modbus.const import READINGS_INTERVAL, TIMEOUTS_BEFORE_DISCONNECT
 
 from .conftest import InverterServer
 

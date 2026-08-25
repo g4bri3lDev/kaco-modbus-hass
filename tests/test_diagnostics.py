@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 from kaco_modbus.testing import BASE_ADDRESS
 
-from custom_components.kaco.diagnostics import async_get_config_entry_diagnostics
+from custom_components.kaco_modbus.diagnostics import async_get_config_entry_diagnostics
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant

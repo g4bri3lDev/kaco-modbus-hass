@@ -1,5 +1,5 @@
 {
-  "domain": "kaco",
+  "domain": "kaco_modbus",
   "name": "KACO new energy",
   "codeowners": [
     "@g4bri3lDev"

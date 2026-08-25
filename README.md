@@ -16,7 +16,7 @@ targets. Older *Powador* units speak a proprietary RS485 protocol and are not su
 
 ## Install
 
-Copy `custom_components/kaco` into your Home Assistant `config/custom_components/`
+Copy `custom_components/kaco_modbus` into your Home Assistant `config/custom_components/`
 directory and restart, then add **KACO new energy** from Settings → Devices & services.
 
 You will be asked for the inverter's address. The unit ID can almost always stay at 1 —
@@ -93,7 +93,7 @@ uv run mypy custom_components/
 picked up without a release. The whole suite runs against a 920-register image captured
 from a real 8.6 TL3, shipped in `kaco_modbus.testing` — no hardware needed.
 
-Translations live in `custom_components/kaco/translations/`. `strings.json` is the
+Translations live in `custom_components/kaco_modbus/translations/`. `strings.json` is the
 source; keep `translations/en.json` identical to it. Do not use `[%key:...%]` references
 in either — those are resolved by Home Assistant core's translation build, which a custom
 integration never goes through, so they would be shown to users verbatim. There are tests

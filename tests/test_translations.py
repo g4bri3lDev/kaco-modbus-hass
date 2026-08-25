@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-COMPONENT = Path(__file__).parent.parent / "custom_components" / "kaco"
+COMPONENT = Path(__file__).parent.parent / "custom_components" / "kaco_modbus"
 STRINGS = COMPONENT / "strings.json"
 TRANSLATIONS = sorted((COMPONENT / "translations").glob("*.json"))
 
@@ -55,7 +55,7 @@ def test_no_unresolved_key_references(path: Path) -> None:
 
 def test_every_entity_translation_key_is_defined() -> None:
     """A translation_key with no entry renders as a raw slug in the UI."""
-    from custom_components.kaco import number, select, sensor, switch
+    from custom_components.kaco_modbus import number, select, sensor, switch
 
     defined = load(STRINGS)["entity"]
     used: set[tuple[str, str]] = set()

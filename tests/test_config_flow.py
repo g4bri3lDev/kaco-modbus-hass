@@ -9,7 +9,7 @@ from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.data_entry_flow import FlowResultType
 from modbus_connection import ModbusTimeoutError
 
-from custom_components.kaco.const import CONF_UNIT_ID, DOMAIN
+from custom_components.kaco_modbus.const import CONF_UNIT_ID, DOMAIN
 
 from .conftest import InverterServer
 

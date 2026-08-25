@@ -7,9 +7,10 @@ from typing import TYPE_CHECKING, Any
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_HOST, CONF_PORT
-from kaco_modbus import KacoError, KacoInverter
 from modbus_connection import ModbusError, ModbusTcpParams
 from modbus_connection.tmodbus import ModbusConnection
+
+from kaco_modbus import KacoError, KacoInverter
 
 from .const import CONF_UNIT_ID, DEFAULT_PORT, DEFAULT_UNIT_ID, DOMAIN
 

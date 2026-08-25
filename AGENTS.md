@@ -1,4 +1,4 @@
-# kaco — Home Assistant integration
+# kaco_modbus — Home Assistant integration
 
 Monitors and controls KACO solar inverters over SunSpec Modbus TCP. All the
 protocol work lives in the
@@ -18,8 +18,18 @@ and the repository the way Home Assistant and HACS will.
 
 ## Domain
 
-The domain is `kaco`, not `kaco_modbus`. **A domain cannot be changed**: it is
-also the `custom_components/` directory name and must be importable.
+The domain is `kaco_modbus`. **A domain cannot be changed** once released: it
+is also the `custom_components/` directory name and must be importable.
+
+It was `kaco` until 2.0.0. That name is held by
+[KoljaWindeler/kaco](https://github.com/KoljaWindeler/kaco), an older
+integration that scrapes the inverter's web interface — two custom
+integrations cannot share a directory name, so one would have overwritten the
+other.
+
+The domain equals the library's package name, which mypy resolves as top-level
+`kaco_modbus` unless `explicit_package_bases` is set. Runtime is unaffected:
+Home Assistant imports this as `custom_components.kaco_modbus`.
 
 "Name the domain after the device, not the transport" comes from
 modbus-connection's Home Assistant guidance, not from Home Assistant itself —
@@ -101,7 +111,7 @@ subject to an interconnection agreement.
 ## Releasing
 
 release-please, driven by conventional commits. The version lives in
-`custom_components/kaco/manifest.json` and is updated by the release PR — do
+`custom_components/kaco_modbus/manifest.json` and is updated by the release PR — do
 not edit it by hand. HACS reads the latest GitHub **release**, so merging that
 PR is what makes a version installable; tags alone are not enough.
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import timedelta
 from typing import Final
 
-DOMAIN: Final = "kaco"
+DOMAIN: Final = "kaco_modbus"
 
 CONF_UNIT_ID: Final = "unit_id"
 DEFAULT_PORT: Final = 502

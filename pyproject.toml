@@ -1,5 +1,5 @@
 # Tooling only. The integration itself is not a package: Home Assistant loads
-# custom_components/kaco/ from disk.
+# custom_components/kaco_modbus/ from disk.
 [project]
 name = "kaco-integration-dev"
 version = "0.0.0"
@@ -24,7 +24,7 @@ testpaths = ["tests"]
 # Home Assistant loads custom_components/ from the config directory, so it is
 # never installed as a package; put the repo root on the path instead.
 pythonpath = ["."]
-addopts = "--cov=custom_components.kaco --cov-report=term-missing"
+addopts = "--cov=custom_components.kaco_modbus --cov-report=term-missing"
 
 [tool.coverage.report]
 fail_under = 90
@@ -32,6 +32,11 @@ fail_under = 90
 [tool.mypy]
 strict = true
 python_version = "3.14"
+# custom_components has no __init__.py, so without these mypy maps
+# custom_components/kaco_modbus/ to a top-level "kaco_modbus" — colliding with
+# the library of that name and reporting its exports as missing.
+mypy_path = "."
+explicit_package_bases = true
 
 [tool.ruff]
 line-length = 100

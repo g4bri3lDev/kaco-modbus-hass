@@ -8,8 +8,9 @@ from typing import TYPE_CHECKING
 
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-from kaco_modbus import MANUFACTURER, SunSpecMapShiftError
 from modbus_connection import ModbusError, ModbusTimeoutError
+
+from kaco_modbus import MANUFACTURER, SunSpecMapShiftError
 
 from .const import DOMAIN, TIMEOUTS_BEFORE_DISCONNECT
 
@@ -18,8 +19,9 @@ if TYPE_CHECKING:
     from datetime import timedelta
 
     from homeassistant.core import HomeAssistant
-    from kaco_modbus import KacoInverter, UpdateReport
     from modbus_connection import ModbusConnection
+
+    from kaco_modbus import KacoInverter, UpdateReport
 
     from . import KacoConfigEntry
 

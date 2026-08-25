@@ -13,9 +13,10 @@ from typing import TYPE_CHECKING
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, Platform
 from homeassistant.exceptions import ConfigEntryNotReady
-from kaco_modbus import KacoInverter
 from modbus_connection import ModbusError, ModbusTcpParams
 from modbus_connection.tmodbus import ModbusConnection
+
+from kaco_modbus import KacoInverter
 
 from .const import CONF_UNIT_ID, READINGS_INTERVAL, SETTINGS_INTERVAL
 from .coordinator import KacoCoordinator

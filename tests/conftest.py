@@ -12,7 +12,7 @@ from kaco_modbus.testing import BASE_ADDRESS, BLUEPLANET_86TL3
 from modbus_connection.mock import MockModbusConnection
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.kaco.const import CONF_UNIT_ID, DOMAIN
+from custom_components.kaco_modbus.const import CONF_UNIT_ID, DOMAIN
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -20,8 +20,8 @@ if TYPE_CHECKING:
 # Where the integration builds its connection. Patching here rather than inside
 # the library keeps the test honest: everything below this point is real code
 # talking to a real, in-memory register map.
-CONNECTION = "custom_components.kaco.ModbusConnection"
-FLOW_CONNECTION = "custom_components.kaco.config_flow.ModbusConnection"
+CONNECTION = "custom_components.kaco_modbus.ModbusConnection"
+FLOW_CONNECTION = "custom_components.kaco_modbus.config_flow.ModbusConnection"
 
 
 class InverterServer:
@@ -73,7 +73,7 @@ class InverterServer:
 
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
-    """Let Home Assistant load custom_components/kaco."""
+    """Let Home Assistant load custom_components/kaco_modbus."""
 
 
 @pytest.fixture

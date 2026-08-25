@@ -22,6 +22,7 @@ from .entity import KacoEntity
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+
     from kaco_modbus import KacoInverter
 
     from . import KacoConfigEntry

@@ -13,8 +13,9 @@ from homeassistant.components.switch import (
 )
 from homeassistant.const import EntityCategory
 from homeassistant.exceptions import HomeAssistantError
-from kaco_modbus import Conn, OutPFSetEna, VArPctEna, WMaxLimEna
 from modbus_connection import ModbusError
+
+from kaco_modbus import Conn, OutPFSetEna, VArPctEna, WMaxLimEna
 
 from .const import DOMAIN
 from .entity import KacoEntity
@@ -22,6 +23,7 @@ from .entity import KacoEntity
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+
     from kaco_modbus import KacoInverter
 
     from . import KacoConfigEntry

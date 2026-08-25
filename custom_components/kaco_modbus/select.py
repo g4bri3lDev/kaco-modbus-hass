@@ -7,8 +7,9 @@ from typing import TYPE_CHECKING
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.const import EntityCategory
 from homeassistant.exceptions import HomeAssistantError
-from kaco_modbus import VArPctMod
 from modbus_connection import ModbusError
+
+from kaco_modbus import VArPctMod
 
 from .const import DOMAIN
 from .entity import KacoEntity

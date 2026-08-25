@@ -32,6 +32,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from homeassistant.helpers.typing import StateType
+
     from kaco_modbus import KacoInverter
 
     from . import KacoConfigEntry
