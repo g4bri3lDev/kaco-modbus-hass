@@ -1,6 +1,6 @@
 {
   "domain": "kaco_modbus",
-  "name": "KACO new energy",
+  "name": "KACO Modbus",
   "codeowners": [
     "@g4bri3lDev"
   ],

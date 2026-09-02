@@ -17,7 +17,7 @@ targets. Older *Powador* units speak a proprietary RS485 protocol and are not su
 ## Install
 
 Copy `custom_components/kaco_modbus` into your Home Assistant `config/custom_components/`
-directory and restart, then add **KACO new energy** from Settings → Devices & services.
+directory and restart, then add **KACO Modbus** from Settings → Devices & services.
 
 You will be asked for the inverter's address. The unit ID can almost always stay at 1 —
 KACO inverters are TCP-native and ignore it. It matters only behind an RS485-to-TCP
