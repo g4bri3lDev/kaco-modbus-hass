@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/g4bri3lDev/kaco-modbus-hass/compare/v2.0.0...v2.1.0) (2026-09-02)
+
+
+### Features
+
+* name the integration KACO Modbus, matching core ([b6404de](https://github.com/g4bri3lDev/kaco-modbus-hass/commit/b6404de0312328bf5f2ab3ad69d38185503ba12f))
+
 ## [2.0.0](https://github.com/g4bri3lDev/kaco-modbus-hass/compare/v1.0.1...v2.0.0) (2026-08-25)
 
 

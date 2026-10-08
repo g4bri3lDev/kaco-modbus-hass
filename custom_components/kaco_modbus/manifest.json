@@ -1,6 +1,6 @@
 {
   "domain": "kaco_modbus",
-  "name": "KACO new energy",
+  "name": "KACO Modbus",
   "codeowners": [
     "@g4bri3lDev"
   ],
@@ -20,5 +20,5 @@
   "requirements": [
     "kaco-modbus==1.0.1"
   ],
-  "version": "2.0.0"
+  "version": "2.1.0"
 }
