@@ -50,12 +50,15 @@ at all.
 A site can therefore mix the two, in which case only the Modbus inverters
 appear here and the Energy dashboard sees part of the plant.
 
-## The library is pinned exactly
+## The library version
 
-`manifest.json` and `pyproject.toml` both pin `kaco-modbus==<version>`, and
-there is deliberately no editable path override: local tests run against the
-same wheel a user gets. A library change therefore has to be released before
-this repository can use it.
+`pyproject.toml` pins `kaco-modbus==<version>`, and there is deliberately no
+editable path override: local tests run against a released wheel. A library
+change therefore has to be released before this repository can use it.
+
+`manifest.json` takes a minimum (`kaco-modbus>=<version>`) instead. Core's
+`kaco_modbus` pins the library too, and hassfest rejects a custom integration
+that pins a package Home Assistant already depends on.
 
 ## The connection belongs to core
 
