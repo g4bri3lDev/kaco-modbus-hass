@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.0](https://github.com/g4bri3lDev/kaco-modbus-hass/compare/v2.1.0...v2.2.0) (2026-10-08)
+
+
+### Features
+
+* reject inverters from other brands, matching core ([3f321da](https://github.com/g4bri3lDev/kaco-modbus-hass/commit/3f321da0c8171c4989d46e550f9186192622de4f))
+* require Home Assistant 2026.10.0 for the shared Modbus connection ([1f5efa7](https://github.com/g4bri3lDev/kaco-modbus-hass/commit/1f5efa76d84efa8cf103027af85a82035bb0c416))
+
+
+### Bug fixes
+
+* require kaco-modbus as a minimum, as hassfest asks ([7a7b4c4](https://github.com/g4bri3lDev/kaco-modbus-hass/commit/7a7b4c48380c1f1b306d29eca0ff86b5c34426b8))
+
 ## [2.1.0](https://github.com/g4bri3lDev/kaco-modbus-hass/compare/v2.0.0...v2.1.0) (2026-09-02)
 
 
