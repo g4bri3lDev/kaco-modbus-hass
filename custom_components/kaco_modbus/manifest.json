@@ -18,7 +18,7 @@
     "tmodbus"
   ],
   "requirements": [
-    "kaco-modbus==1.0.1"
+    "kaco-modbus==1.1.0"
   ],
   "version": "2.1.0"
 }

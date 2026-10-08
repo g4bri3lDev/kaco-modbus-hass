@@ -6,11 +6,12 @@ import logging
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from homeassistant.exceptions import ConfigEntryError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from modbus_connection import ModbusError, ModbusTimeoutError
 
-from kaco_modbus import MANUFACTURER, SunSpecMapShiftError
+from kaco_modbus import NotAKacoInverterError, SunSpecMapShiftError
 
 from .const import DOMAIN, TIMEOUTS_BEFORE_DISCONNECT
 
@@ -81,18 +82,34 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
         """Refresh one category, and report what actually came back."""
         try:
             report = await self._poll()
+        except NotAKacoInverterError as err:
+            # Identity is settled on the first poll, so a swapped device
+            # surfaces here. Retrying cannot make it a KACO.
+            raise ConfigEntryError(
+                translation_domain=DOMAIN,
+                translation_key="not_a_kaco_inverter",
+                translation_placeholders={"error": str(err)},
+            ) from err
         except SunSpecMapShiftError as err:
             # The model chain moved, so every bound register offset is stale.
             # Nothing short of rediscovery fixes that. Note this is *not* a
             # ModbusError, so it needs its own clause.
             self.hass.config_entries.async_schedule_reload(self.entry.entry_id)
-            raise UpdateFailed(f"the SunSpec map moved: {err}") from err
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="sunspec_map_moved",
+                translation_placeholders={"error": str(err)},
+            ) from err
         except ModbusError as err:
             # The library only raises what it could not attribute to one
             # component; anything per-component arrives in the report instead.
             if isinstance(err, ModbusTimeoutError):
                 await self._async_note_timeout()
-            raise UpdateFailed(str(err)) from err
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="cannot_connect",
+                translation_placeholders={"error": str(err)},
+            ) from err
 
         if not report.updated:
             errors = list(report.failed.values())
@@ -102,9 +119,11 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
             # which is why the timeout count has to be kept from the report too.
             if errors and all(isinstance(err, ModbusTimeoutError) for err in errors):
                 await self._async_note_timeout()
-            raise UpdateFailed(f"nothing answered: {errors[0]}") from ExceptionGroup(
-                "every sub-system failed", errors
-            )
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="no_component_answered",
+                translation_placeholders={"name": self.entry.title},
+            ) from ExceptionGroup("every sub-system failed", errors)
 
         self._timeouts = 0
 
@@ -123,7 +142,7 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
         assert info is not None
         return DeviceInfo(
             identifiers={(DOMAIN, info.serial_number)},
-            manufacturer=MANUFACTURER,
+            manufacturer=info.manufacturer,
             model=info.model,
             sw_version=info.firmware,
             serial_number=info.serial_number,
