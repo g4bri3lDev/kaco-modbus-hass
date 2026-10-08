@@ -6,11 +6,12 @@ import logging
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from homeassistant.exceptions import ConfigEntryError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from modbus_connection import ModbusError, ModbusTimeoutError
 
-from kaco_modbus import MANUFACTURER, SunSpecMapShiftError
+from kaco_modbus import NotAKacoInverterError, SunSpecMapShiftError
 
 from .const import DOMAIN, TIMEOUTS_BEFORE_DISCONNECT
 
@@ -19,7 +20,7 @@ if TYPE_CHECKING:
     from datetime import timedelta
 
     from homeassistant.core import HomeAssistant
-    from modbus_connection import ModbusConnection
+    from modbus_connection import ModbusUnit
 
     from kaco_modbus import KacoInverter, UpdateReport
 
@@ -38,7 +39,7 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
         self,
         hass: HomeAssistant,
         entry: KacoConfigEntry,
-        connection: ModbusConnection,
+        unit: ModbusUnit,
         device: KacoInverter,
         poll: Callable[[], Awaitable[UpdateReport]],
         interval: timedelta,
@@ -54,45 +55,61 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
         )
         self.entry = entry
         self.device = device
-        self._connection = connection
+        self._unit = unit
         self._poll = poll
         self._failed: frozenset[str] = frozenset()
         self._timeouts = 0
 
     async def _async_note_timeout(self) -> None:
-        """Count a silent poll, and drop a link that has stopped answering.
+        """Count a silent poll, and recycle a link that has stopped answering.
 
-        A grid-tied inverter after dark accepts the TCP connection and then
-        answers nothing, so the socket looks healthy and nothing would ever
-        reopen it. After enough silence, close it: the next poll connects
-        again from scratch.
+        Safe on a shared connection: disconnect is a passthrough that leaves
+        the connection owned by the modbus integration, which rebuilds it on
+        the next request. Closing it is deliberately not possible from a unit,
+        so one consumer cannot take it away from the others.
         """
         self._timeouts += 1
         if self._timeouts >= TIMEOUTS_BEFORE_DISCONNECT:
             _LOGGER.debug(
-                "No answer from %s after %s attempts; dropping the connection",
+                "No answer from %s after %s attempts; recycling the link",
                 self.entry.title,
                 self._timeouts,
             )
-            await self._connection.disconnect()
+            await self._unit.disconnect()
             self._timeouts = 0
 
     async def _async_update_data(self) -> UpdateReport:
         """Refresh one category, and report what actually came back."""
         try:
             report = await self._poll()
+        except NotAKacoInverterError as err:
+            # Identity is settled on the first poll, so a swapped device
+            # surfaces here. Retrying cannot make it a KACO.
+            raise ConfigEntryError(
+                translation_domain=DOMAIN,
+                translation_key="not_a_kaco_inverter",
+                translation_placeholders={"error": str(err)},
+            ) from err
         except SunSpecMapShiftError as err:
             # The model chain moved, so every bound register offset is stale.
             # Nothing short of rediscovery fixes that. Note this is *not* a
             # ModbusError, so it needs its own clause.
             self.hass.config_entries.async_schedule_reload(self.entry.entry_id)
-            raise UpdateFailed(f"the SunSpec map moved: {err}") from err
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="sunspec_map_moved",
+                translation_placeholders={"error": str(err)},
+            ) from err
         except ModbusError as err:
             # The library only raises what it could not attribute to one
             # component; anything per-component arrives in the report instead.
             if isinstance(err, ModbusTimeoutError):
                 await self._async_note_timeout()
-            raise UpdateFailed(str(err)) from err
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="cannot_connect",
+                translation_placeholders={"error": str(err)},
+            ) from err
 
         if not report.updated:
             errors = list(report.failed.values())
@@ -102,9 +119,11 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
             # which is why the timeout count has to be kept from the report too.
             if errors and all(isinstance(err, ModbusTimeoutError) for err in errors):
                 await self._async_note_timeout()
-            raise UpdateFailed(f"nothing answered: {errors[0]}") from ExceptionGroup(
-                "every sub-system failed", errors
-            )
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="no_component_answered",
+                translation_placeholders={"name": self.entry.title},
+            ) from ExceptionGroup("every sub-system failed", errors)
 
         self._timeouts = 0
 
@@ -123,7 +142,7 @@ class KacoCoordinator(DataUpdateCoordinator["UpdateReport"]):
         assert info is not None
         return DeviceInfo(
             identifiers={(DOMAIN, info.serial_number)},
-            manufacturer=MANUFACTURER,
+            manufacturer=info.manufacturer,
             model=info.model,
             sw_version=info.firmware,
             serial_number=info.serial_number,

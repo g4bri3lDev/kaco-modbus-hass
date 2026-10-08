@@ -3,7 +3,7 @@
 [project]
 name = "kaco-integration-dev"
 version = "0.0.0"
-requires-python = ">=3.14"
+requires-python = ">=3.14.2"
 dependencies = []
 
 [tool.uv]
@@ -11,9 +11,11 @@ package = false
 
 [dependency-groups]
 dev = [
-    "kaco-modbus==1.0.1",
-    "modbus-connection[tmodbus]>=4.8.1,<5",
-    "pytest-homeassistant-custom-component>=0.13",
+    "kaco-modbus==1.1.0",
+    "modbus-connection[tmodbus]==4.12.3",
+    "tmodbus==0.6.2",
+    "pymodbus==3.13.1",
+    "pytest-homeassistant-custom-component>=0.13.371",
     "mypy>=1.13",
     "ruff>=0.8",
 ]

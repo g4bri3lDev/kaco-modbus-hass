@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.helpers import device_registry as dr
+from kaco_modbus.testing import BLUEPLANET_86TL3, with_manufacturer
 from modbus_connection import ModbusTimeoutError
 
 from custom_components.kaco_modbus.const import DOMAIN
@@ -24,7 +25,9 @@ async def test_setup(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None
 async def test_device_registry_entry(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None:
     """The device is identified by serial, which survives an address change."""
     registry = dr.async_get(hass)
-    device = registry.async_get_device(identifiers={(DOMAIN, "8.6TL00000000")})
+    device = registry.async_get_device_by_identifier(
+        (DOMAIN, "8.6TL00000000"), loaded_entry.entry_id
+    )
 
     assert device is not None
     assert device.manufacturer == "KACO new energy"
@@ -51,3 +54,18 @@ async def test_a_silent_inverter_retries_rather_than_failing(
     await hass.async_block_till_done()
 
     assert config_entry.state is ConfigEntryState.SETUP_RETRY
+
+
+async def test_another_brand_at_the_same_address_fails_permanently(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    inverter: InverterServer,
+) -> None:
+    """Retrying cannot make a Fronius into a KACO, so this is not retried."""
+    inverter.registers = with_manufacturer(BLUEPLANET_86TL3, "Fronius")
+    config_entry.add_to_hass(hass)
+
+    assert not await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert config_entry.state is ConfigEntryState.SETUP_ERROR

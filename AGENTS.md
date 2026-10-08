@@ -50,17 +50,27 @@ at all.
 A site can therefore mix the two, in which case only the Modbus inverters
 appear here and the Energy dashboard sees part of the plant.
 
-## The library is pinned exactly
+## The library version
 
-`manifest.json` and `pyproject.toml` both pin `kaco-modbus==<version>`, and
-there is deliberately no editable path override: local tests run against the
-same wheel a user gets. A library change therefore has to be released before
-this repository can use it.
+`pyproject.toml` pins `kaco-modbus==<version>`, and there is deliberately no
+editable path override: local tests run against a released wheel. A library
+change therefore has to be released before this repository can use it.
 
-`tmodbus` is listed **explicitly** in the manifest requirements alongside
-`modbus-connection[tmodbus]`. Home Assistant does not install extras when the
-base package is already present, so relying on the extra alone gives
-`ModuleNotFoundError: No module named 'tmodbus'` on a fresh install.
+`manifest.json` takes a minimum (`kaco-modbus>=<version>`) instead. Core's
+`kaco_modbus` pins the library too, and hassfest rejects a custom integration
+that pins a package Home Assistant already depends on.
+
+## The connection belongs to core
+
+The `modbus` integration owns the connection (`dependencies: ["modbus"]`):
+setup takes a unit with `async_get_unit`, and the config flow probes with
+`async_get_temporary_unit`. That is what lists the inverter in the Modbus
+panel, and it lets other integrations share the link. `modbus-connection`,
+`tmodbus` and `pymodbus` therefore come from core and are not in the manifest
+requirements; the dev group in `pyproject.toml` pins them to core's versions,
+since the `homeassistant` wheel does not install a component's requirements.
+Both helpers first shipped in Home Assistant 2026.10.0, the minimum in
+`hacs.json`.
 
 ## Traps that have already caught this project
 
@@ -118,11 +128,3 @@ PR is what makes a version installable; tags alone are not enough.
 Merges are **not** squashed, so individual commit messages reach the
 changelog. A `feat!` whose breaking change a later commit undoes would leave a
 false entry — collapse such a branch before merging.
-
-## Open work
-
-`use-core-shared-connection` (draft PR #3) migrates to core's shared Modbus
-connection: `async_get_unit` for setup, `async_get_temporary_unit` for the
-config flow probe. It is blocked until Home Assistant 2026.9.0 ships — the
-pinned `pytest-homeassistant-custom-component` carries 2026.8.3, which has no
-`connection.py`, so CI fails there by design.

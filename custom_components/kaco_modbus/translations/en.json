@@ -17,7 +17,10 @@
     },
     "error": {
       "cannot_connect": "Failed to connect",
-      "not_a_kaco_inverter": "Something answered, but it is not a SunSpec inverter. Check that Modbus TCP is enabled on the inverter and that the address belongs to it."
+      "not_a_kaco_inverter": "That address answers, but the device is not a KACO inverter.",
+      "not_a_sunspec_inverter": "Something answered, but it is not a SunSpec inverter. Check that Modbus TCP is enabled on the inverter and that the address belongs to it.",
+      "unknown": "Unexpected error",
+      "already_in_use": "This inverter is already in use with different connection settings, which cannot both be used on one connection."
     },
     "abort": {
       "already_configured": "Device is already configured"
@@ -143,6 +146,18 @@
     }
   },
   "exceptions": {
+    "cannot_connect": {
+      "message": "Failed to reach the inverter: {error}"
+    },
+    "no_component_answered": {
+      "message": "{name} accepted the connection but answered nothing."
+    },
+    "not_a_kaco_inverter": {
+      "message": "The device at this address is not a KACO inverter: {error}"
+    },
+    "sunspec_map_moved": {
+      "message": "The inverter's SunSpec register map moved, so the integration is reloading to find it again: {error}"
+    },
     "write_failed": {
       "message": "The inverter rejected the change: {error}"
     }

@@ -17,7 +17,10 @@
     },
     "error": {
       "cannot_connect": "Verbindung fehlgeschlagen",
-      "not_a_kaco_inverter": "Es hat etwas geantwortet, aber es ist kein SunSpec-Wechselrichter. Prüfe, ob Modbus TCP am Wechselrichter aktiviert ist und die Adresse wirklich zu ihm gehört."
+      "not_a_kaco_inverter": "Unter dieser Adresse antwortet ein Gerät, aber es ist kein KACO-Wechselrichter.",
+      "not_a_sunspec_inverter": "Es hat etwas geantwortet, aber es ist kein SunSpec-Wechselrichter. Prüfe, ob Modbus TCP am Wechselrichter aktiviert ist und die Adresse wirklich zu ihm gehört.",
+      "unknown": "Unerwarteter Fehler",
+      "already_in_use": "Dieser Wechselrichter wird bereits mit anderen Verbindungseinstellungen verwendet; beide lassen sich nicht über eine Verbindung nutzen."
     },
     "abort": {
       "already_configured": "Gerät ist bereits konfiguriert"
@@ -85,6 +88,18 @@
     }
   },
   "exceptions": {
+    "cannot_connect": {
+      "message": "Der Wechselrichter ist nicht erreichbar: {error}"
+    },
+    "no_component_answered": {
+      "message": "{name} hat die Verbindung angenommen, aber nichts geantwortet."
+    },
+    "not_a_kaco_inverter": {
+      "message": "Das Gerät unter dieser Adresse ist kein KACO-Wechselrichter: {error}"
+    },
+    "sunspec_map_moved": {
+      "message": "Die SunSpec-Registerbelegung des Wechselrichters hat sich verschoben; die Integration wird neu geladen, um sie wiederzufinden: {error}"
+    },
     "write_failed": {
       "message": "Der Wechselrichter hat die Änderung abgelehnt: {error}"
     }
