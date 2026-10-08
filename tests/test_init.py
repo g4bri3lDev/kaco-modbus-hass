@@ -24,7 +24,9 @@ async def test_setup(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None
 async def test_device_registry_entry(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None:
     """The device is identified by serial, which survives an address change."""
     registry = dr.async_get(hass)
-    device = registry.async_get_device(identifiers={(DOMAIN, "8.6TL00000000")})
+    device = registry.async_get_device_by_identifier(
+        (DOMAIN, "8.6TL00000000"), loaded_entry.entry_id
+    )
 
     assert device is not None
     assert device.manufacturer == "KACO new energy"

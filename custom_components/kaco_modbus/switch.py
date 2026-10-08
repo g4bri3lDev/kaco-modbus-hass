@@ -6,11 +6,8 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from homeassistant.components.switch import (
-    SwitchDeviceClass,
-    SwitchEntity,
-    SwitchEntityDescription,
-)
+from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
+from homeassistant.components.switch.const import SwitchDeviceClass
 from homeassistant.const import EntityCategory
 from homeassistant.exceptions import HomeAssistantError
 from modbus_connection import ModbusError
